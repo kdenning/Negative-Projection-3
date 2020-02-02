@@ -437,15 +437,20 @@ effects_data <- as_tibble(effect(term = "self_c:ident_c",
 effects_data$Identification <-as.factor(effects_data$ident_c)
 
 #With confidence intervals
-ggplot(effects_data, aes(self_c, fit)) +
+ggplot(effects_data, aes(self_c, fit, color = Identification)) +
   geom_smooth(method = "lm", 
-              size = .7, 
+              se = FALSE,
+              size = 1.25, 
+              alpha = .3,
               aes(color = Identification)) +
-  scale_color_discrete(breaks = c(-0.93, 0, 0.93), 
-                       labels = c ("Weak Identification \n (1 SD Below)", 
-                                  "Average Identification", 
-                                  "High Identification \n (1 SD above)")) +
-  theme_minimal() +
+  scale_color_manual(breaks = c(-0.93, 0, 0.93), 
+                     labels = c ("Weak (1 SD Below)", 
+                                  "Average", 
+                                  "High (1 SD above)"),
+                     values = c('#404788FF',
+                               '#55C667FF',
+                               '#FDE725FF')) +
+  theme_minimal(base_size = 13) +
   labs(title = "Main effect of in-group identification predicting projection",
        x = "Personality ratings for self",
        y = "Personality ratings for target")
@@ -481,10 +486,17 @@ cond_recode_plot <- model_data %>%
                             `thirdpart` = "Third party"))
 
 ggplot(cond_recode_plot, aes(self_c, targ)) +
-  geom_smooth(method = "lm", se = FALSE, size = .7, aes(color = Condition)) +
-  theme_minimal() +
-  labs(title = "Main effect of condition on projection",
-       subtitle = "Contrast comparing marijuana legalization to race and politics was significant",
+  geom_smooth(method = "lm", se = TRUE, size = 1.25, alpha = .3, aes(color = Condition, fill = Condition)) +
+  theme_minimal(base_size = 13) +
+  scale_color_manual(values = c('#404788FF',
+                               '#238A8DFF',
+                               '#55C667FF',
+                               '#FDE725FF')) +
+  scale_fill_manual(values = c('#404788FF',
+                               '#238A8DFF',
+                               '#55C667FF',
+                               '#FDE725FF')) +
+  labs(title = "Main effect of issue polarization condition on projection",
        x = "Personality ratings for self",
        y = "Personality ratings for target")
 ```
@@ -540,7 +552,7 @@ effects_data2$Identification <-as.factor(effects_data2$ident_c)
 
 ggplot(effects_data2, aes(self_c, fit)) +
   geom_smooth(method = "lm", 
-              size = .7, 
+              size = .7,
               aes(color = Identification)) +
   scale_color_discrete(breaks = c(-0.93, 0, 0.93), 
                        labels = c ("Weak Identification \n (1 SD Below)", 
@@ -584,13 +596,17 @@ effects_data3 <- as_tibble(effect(term = "self_c:perceived_polar_c",
 effects_data3$perceived_polar <-as.factor(effects_data3$perceived_polar_c)
 
 ggplot(effects_data3, aes(self_c, fit)) +
-  geom_smooth(method = "lm", aes(color = perceived_polar)) +
-  scale_color_discrete(breaks = c(-1.96, 0, 1.96), 
-                       labels = c ("Weak perceived polarization \n (1 SD Below)", 
-                                  "Average perceived polarization", 
-                                  "High perceived polarization \n (1 SD above)")) +
-  theme_minimal() +
-  labs(title = "Main effect of perceived polarization predicting projection",
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              size = 1.25, 
+              aes(color = perceived_polar)) +
+  scale_color_viridis_d("Perceived Polarization",
+                       breaks = c(-1.96, 0, 1.96), 
+                       labels = c ("Weak (1 SD Below)", 
+                                  "Average", 
+                                  "High (1 SD above)")) +
+  theme_minimal(base_size = 13) +
+  labs(title = "Trending main effect of perceived polarization on projection",
        x = "Personality ratings for self",
        y = "Personality ratings for target")
 ```
