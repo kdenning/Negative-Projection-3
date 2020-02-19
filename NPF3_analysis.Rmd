@@ -8,7 +8,7 @@ output:
     toc: true
     toc_float: true
 ---
-```{r setup data import and cleaning, echo = FALSE, warning = FALSE, message=FALSE, error=FALSE}
+```{r setup data import and cleaning, echo = FALSE, warning = FALSE, message = FALSE, error = FALSE}
 # Cleaning
 ## import data
 
@@ -36,187 +36,66 @@ library(sjPlot)
 library(emmeans)
 library(effects)
 
-#Setting global chunk options
+# Setting global chunk options
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
 
-#Data after manually removing participants who did not correctly complete the PT manipulation
+# Data after manually removing participants who did not correctly complete the PT manipulation
 npf2_wide <- import("npf2_wide_ptclean2 copy.xlsx") 
 
-#dropping second row that had full questions and overwriting because don't want that for analyses
-npf2_wide <- npf2_wide[-c(1),,drop=F] 
+# Dropping second row that had full questions and overwriting because don't want that for analyses
+npf2_wide <- npf2_wide[-c(1),, drop = F] 
 
-#reverse coding
-npf2_wide %<>% 
-  mutate(bfi2xsh_self_quiet_r = recode(bfi2xsh_self_quiet, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_self_rude_r = recode(bfi2xsh_self_rude, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-         bfi2xsh_self_disorg_r = recode(bfi2xsh_self_disorg, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_self_taskdiff_r = recode(bfi2xsh_self_taskdiff, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_self_stable_r = recode(bfi2xsh_self_stable, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_self_abstract_r = recode(bfi2xsh_self_abstract, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-         bfi2xsh_self_risk_r = recode(bfi2xsh_self_risk, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-        bfi2xsh_self_uses_r = recode(bfi2xsh_self_uses, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_targ_quiet_r = recode(bfi2xsh_targ_quiet, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_targ_rude_r = recode(bfi2xsh_targ_rude, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-         bfi2xsh_targ_disorg_r = recode(bfi2xsh_targ_disorg, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_targ_taskdiff_r = recode(bfi2xsh_targ_taskdiff, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_targ_stable_r = recode(bfi2xsh_targ_stable, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-          bfi2xsh_targ_abstract_r = recode(bfi2xsh_targ_abstract, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-        bfi2xsh_targ_risk_r = recode(bfi2xsh_targ_risk, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1"),
-        bfi2xsh_targ_uses_r = recode(bfi2xsh_targ_uses, `1` = "5",
-                                   `2` = "4",
-                                   `3` = "3",
-                                   `4` = "2",
-                                   `5` = "1")) %>% 
-  select(-c(bfi2xsh_self_quiet, bfi2xsh_self_rude, bfi2xsh_self_taskdiff, 
-            bfi2xsh_self_stable, bfi2xsh_self_abstract, bfi2xsh_targ_quiet, 
-            bfi2xsh_targ_rude, bfi2xsh_targ_taskdiff, bfi2xsh_targ_stable, 
-            bfi2xsh_targ_abstract, bfi2xsh_targ_disorg, bfi2xsh_self_disorg, 
-            bfi2xsh_targ_risk, bfi2xsh_self_risk, bfi2xsh_targ_uses, 
-            bfi2xsh_self_uses)) 
+# Reverse coding
+npf2_wide_recode <- npf2_wide %>% 
+     mutate_at(c("bfi2xsh_self_quiet", "bfi2xsh_self_rude", 
+                 "bfi2xsh_self_disorg", "bfi2xsh_self_taskdiff",
+                 "bfi2xsh_self_stable", "bfi2xsh_self_abstract",
+                 "bfi2xsh_self_risk", "bfi2xsh_self_uses",
+                 "bfi2xsh_targ_quiet", "bfi2xsh_targ_rude",
+                 "bfi2xsh_targ_rude", "bfi2xsh_targ_disorg",
+                 "bfi2xsh_targ_taskdiff", "bfi2xsh_targ_stable",
+                 "bfi2xsh_targ_abstract", "bfi2xsh_targ_risk",
+                 "bfi2xsh_targ_uses"), 
+               list(~recode(., `1`= 5, `2`= 4, `3` = 3, `4` = 2, `5` = 1)))
 
-
-# putting data in long format
-npf2_clean1 <- npf2_wide %>% 
-  gather("bfi2xsh_type", "bfi2xsh_score", 
-         c(bfi2xsh_self_heart:bfi2xsh_self_rules, 
-           bfi2xsh_targ_heart:bfi2xsh_targ_rules, 
-           bfi2xsh_self_quiet_r:bfi2xsh_targ_uses_r)) %>% 
-  separate(.,bfi2xsh_type, c("drop",
-                             "bfi2xsh_type", 
-                             "bfi2xsh_qcontent"), "\\_") %>% 
-  select(-drop) %>% 
-  spread(bfi2xsh_type, bfi2xsh_score) %>% 
-  gather("condition", "ident", c(ident_pol, 
-                                 ident_race, 
-                                 ident_weed, 
-                                 ident_thirdpart)) %>% 
-  separate(.,condition,c("drop","condition"),"\\_") %>% 
-  select(-drop) %>% 
-  filter(!is.na(ident)) %>% 
-  gather("drop1", "lib", c(lib_pol, 
-                           lib_race, 
-                           lib_weed, 
-                           lib_thirdpart)) %>% 
+# Cleaning and putting data in long-format
+npf2_clean <- npf2_wide_recode %>% 
+  # Dropping open-ended questions
+  select(-c(pt_narr_pol, pt_narr_race, pt_narr_thirdpart, pt_narr_weed)) %>% 
+  # Making all character variables numeric
+  mutate_if(is.character,as.numeric) %>% 
+  # Putting responses for personality items into long format for participant and target
+  pivot_longer(c(bfi2xsh_self_quiet:bfi2xsh_self_rules, 
+           bfi2xsh_targ_quiet:bfi2xsh_targ_rules),
+           names_sep = "_",
+           names_to = c("drop1", "bfi2xsh_type", "bfi2xsh_qtype")) %>% 
+  pivot_wider(names_from = bfi2xsh_type, values_from = value) %>% 
+  # Putting responses on other items (conditon, identification, liberal and conservative ratings) into long-format
+  pivot_longer(c(opin_pol:check_thirdpart),
+               names_sep = "_",
+               names_to = c("question", "condition")) %>% 
+  na.omit() %>% 
+  pivot_wider(names_from = question, values_from = value) %>% 
   select(-drop1) %>% 
-  filter(!is.na(lib)) %>% 
-  gather("drop", "cons", c(cons_pol, 
-                           cons_race, 
-                           cons_weed, 
-                           cons_thirdpart)) %>% 
-  select(-drop) %>% 
-  filter(!is.na(cons)) %>% 
-  gather("drop", "pt_narr", c(pt_narr_pol, 
-                              pt_narr_race, 
-                              pt_narr_weed, 
-                              pt_narr_thirdpart)) %>% 
-  select(-drop) %>% 
-  #filter(!is.na(pt_narr)) %>% 
-  gather("drop", "check", c(check_pol, 
-                            check_race, 
-                            check_weed, 
-                            check_thirdpart)) %>% 
-  select(-drop) %>% 
-  filter(!is.na(check)) %>% 
-  gather("opin_cat", "opin", c(opin_pol, 
-                               opin_race, 
-                               opin_weed, 
-                               opin_thirdpart)) %>% 
-  filter(!is.na(opin)) 
-
-
-# Making the variables numeric or factor, creating perceived polarization variable, centering continous predictors, exclude people who failed manipulation or answered "neither" to politic candidates in politics condition, remove missing people with listwise missing data on variables necessary for the analysis, participants who did not complete the pt condition correctly (few word answers, said I don't know) were already removed
-npf2_clean2 <- npf2_clean1 %>% 
-  mutate(sub_id = as.numeric(sub_id),
-         age = as.numeric(age),
-         gender = as.numeric(gender),
-         race = as.numeric(race),
-         bfi2xsh_qcontent = as.factor(bfi2xsh_qcontent),
-         self = as.numeric(self),
-         targ = as.numeric(targ),
-         ident = as.numeric(ident),
-         lib = as.numeric(lib),
-         cons = as.numeric(cons),
-         condition = as.factor(condition),
-         check = as.numeric(check),
-         opin = as.factor(opin),
-         opin_cat = as.factor(opin_cat)) %>% 
+  # Making a varriable for perceived polarization, making condition a factor variable
   mutate(perceived_polar = abs(lib-cons),
          condition = fct_relevel(condition, 
                                  "pol", 
                                  "race", 
                                  "weed", 
                                  "thirdpart")) %>% 
+  # Mean centering continuous predictors
   mutate(self_c = self - mean(self, na.rm = TRUE),
          ident_c = ident - mean(ident, na.rm = TRUE),
          perceived_polar_c = perceived_polar - 
            mean(perceived_polar, na.rm = TRUE)) %>% 
-  #removing opin = 5 for when including the condition variable in the analysis 
-#removing it because only want in and out-group for this analysis
+# Removing opin = 5 for when including the condition variable in the analysis 
+# Removing it because only want in and out-group for this analysis, this was an error in data collection to have a third option
   filter(opin != 5) %>% 
+  # Removing those who responded incorrectly to the manipulation check
   filter(check != 4)
-
 ```
 
 # Demographics
@@ -224,7 +103,7 @@ npf2_clean2 <- npf2_clean1 %>%
 ## Number of participants overall
 
 ```{r participants number}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id) %>% 
   unique() %>% 
   nrow()
@@ -233,7 +112,7 @@ npf2_clean2 %>%
 ## Number of participants per condition
 
 ```{r participants per condition}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, condition) %>% 
   unique() %>% 
   group_by(condition) %>% 
@@ -243,7 +122,7 @@ npf2_clean2 %>%
 ## Gender
 
 ```{r gender}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, gender) %>% 
   mutate(gender = recode(gender, 
                          `1` = "Male",
@@ -257,7 +136,7 @@ npf2_clean2 %>%
 ## Race
 
 ```{r race}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, race) %>% 
   mutate(race = recode(race, 
                        `1` = "American Indian/Alaska Native",
@@ -271,50 +150,14 @@ npf2_clean2 %>%
                        `10` = "Other")) %>% 
   unique() %>% 
   group_by(race) %>% 
-  count()
+  count() %>% 
+  mutate(percent = n/334*100)
 ```
-
-#### Caucasian percentage
-
-```{r}
-white <- (218/336)*100
-white
-```
-
-#### Asian percentage
-
-```{r}
-asian <- (47/336)*100
-asian
-```
-
-#### Identify as "Other" percentage
-
-```{r}
-other <- (26/336)*100
-other
-```
-
-#### Latinx percentage
-
-```{r}
-latinx <- (23/336)*100
-latinx
-```
-
-#### Black percentage
-
-```{r}
-black <- (13/336)*100
-black
-```
-
-All other groups did not represent more than 1% of the sample
 
 ## Age
 
 ```{r age}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, age) %>% 
   na.omit() %>% 
   summarize(mean = mean(age),
@@ -326,17 +169,14 @@ npf2_clean2 %>%
 We chose to exclude people in the third party system condition because the issue is not necessarily framed as liberal or conservative issue.
 
 ```{r agree with liberal issues}
-levels(npf2_clean2$opin_cat)
-npf2_clean2 %>% 
-  select(sub_id, opin, opin_cat) %>% 
-  filter(opin_cat != "opin_thirdpart") %>% 
+npf2_clean %>% 
+  select(sub_id, opin, condition) %>% 
+  filter(condition != "thirdpart") %>% 
   na.omit() %>% 
   unique() %>% 
   group_by(opin) %>% 
-  count() 
-
-percent_lib <- (196/238)*100
-percent_lib
+  count() %>% 
+  mutate(percent_lib = n/236*100)
 ```
 
 ## Histogram of distributions
@@ -344,7 +184,7 @@ percent_lib
 ### In-group identification
 
 ```{r hist identification}
-hist_ident <- npf2_clean2 %>% 
+hist_ident <- npf2_clean %>% 
   select(sub_id, ident) %>% 
   unique()
 hist(hist_ident$ident)
@@ -353,7 +193,7 @@ hist(hist_ident$ident)
 ### Perceived polarization
 
 ```{r perceived polarization distribution}
-hist_polar <- npf2_clean2 %>% 
+hist_polar <- npf2_clean %>% 
   select(sub_id, perceived_polar) %>% 
   unique()
 hist(hist_polar$perceived_polar)
@@ -364,7 +204,7 @@ hist(hist_polar$perceived_polar)
 ### BFI for Self
 
 ```{r BFI self}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, condition, self) %>% 
   na.omit() %>% 
   group_by(condition) %>% 
@@ -375,7 +215,7 @@ npf2_clean2 %>%
 ### BFI for Target
 
 ```{r BFI targ}
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, condition, targ) %>% 
   na.omit() %>% 
   group_by(condition) %>% 
@@ -386,8 +226,7 @@ npf2_clean2 %>%
 ## Mean and SD for in-group identification
 
 ```{r identification}
-#Mean
-npf2_clean2 %>% 
+npf2_clean %>% 
   select(sub_id, condition, ident) %>% 
   na.omit() %>% 
   group_by(condition) %>% 
@@ -400,7 +239,7 @@ npf2_clean2 %>%
 ## Contrast codes
 
 ```{r contrasts}
-model_data <- npf2_clean2 %>% 
+model_data <- npf2_clean %>% 
   select(targ, self_c, ident_c, condition, sub_id, perceived_polar_c, perceived_polar) %>% 
   na.omit()
 levels(model_data$condition)
@@ -419,10 +258,27 @@ model1_randomslopes <- lmer(targ ~ self_c*ident_c*condition + (self_c|sub_id),
                             data = model_data)
 
 tab_model(model1_randomslopes,
-          title = "MLM predicting projection with random slopes and helmert contrasts")
+          title = "MLM predicting projection with random slopes and helmert contrasts",
+          dv.labels = "BFI responses for target",
+          pred.labels = c("(Intercept)",
+                          "BFI responses for self",
+                          "Identification",
+                          "Condition 1: Politics vs Race",
+                          "Condition 2: Politics, Race vs Marijuana",
+                          "Condition 3: Politics, Race, Marijuana vs Third Party",
+                          "BFI responses for self:Identification",
+                          "BFI responses for self:Condition 1",
+                          "BFI responses for self:Condition 2",
+                          "BFI responses for self:Condition 3",
+                          "Identification:Conditon 1",
+                          "Identification:Condition 2",
+                          "Identification:Condition 3",
+                          "BFI responses for self:Identification:Condition 1",
+                          "BFI responses for self:Identification:Condition 2",
+                          "BFI responses for self:Identification:Condition 3"))
 ```
 
-## Plots
+## Plots for Model 1
 
 ### Main effect of in-group identification on projection
 
@@ -431,19 +287,19 @@ tab_model(model1_randomslopes,
 describe(model_data$ident_c)
 
 effects_data <- as_tibble(effect(term = "self_c:ident_c", 
-                                 xlevels = list(ident_c = c(-0.93, 0, 0.93)),
+                                 xlevels = list(ident_c = c(-0.94, 0, 0.94)),
                                  mod = model1_randomslopes), na.rm = TRUE)
 
 effects_data$Identification <-as.factor(effects_data$ident_c)
 
-#With confidence intervals
+# Color plot for conference presentation
 ggplot(effects_data, aes(self_c, fit, color = Identification)) +
   geom_smooth(method = "lm", 
               se = FALSE,
               size = 1.25, 
               alpha = .3,
               aes(color = Identification)) +
-  scale_color_manual(breaks = c(-0.93, 0, 0.93), 
+  scale_color_manual(breaks = c(-0.94, 0, 0.94), 
                      labels = c ("Weak (1 SD Below)", 
                                   "Average", 
                                   "High (1 SD above)"),
@@ -458,10 +314,11 @@ ggplot(effects_data, aes(self_c, fit, color = Identification)) +
 ```
 
 ```{r model 1 plot BW main effect identification}
+# Black and white plot for publication
 ggplot(effects_data, aes(self_c, fit, group = Identification)) +
   geom_line(aes(linetype = Identification), size = .7) + 
   scale_linetype_manual("Identification", 
-                       breaks = c(-0.93, 0, 0.93), 
+                       breaks = c(-0.94, 0, 0.94), 
                        labels = c ("Weak (1 SD below)", 
                                   "Average", 
                                   "High (1 SD above)"),
@@ -477,7 +334,7 @@ ggplot(effects_data, aes(self_c, fit, group = Identification)) +
 ### Main effect of condition on projection 
 
 ```{r model 1 plot color main effect condition}
-#set-up stats for plot
+# Set-up stats for plot
 levels(model_data$condition) 
 cond_recode_plot <- model_data %>%
   mutate(Condition = recode(condition, 
@@ -486,6 +343,7 @@ cond_recode_plot <- model_data %>%
                             `weed` = "Marijuana",
                             `thirdpart` = "Third party"))
 
+# Color plot for conference presentation
 ggplot(cond_recode_plot, aes(self_c, targ)) +
   geom_smooth(method = "lm", se = TRUE, size = 1.25, alpha = .3, aes(color = Condition, fill = Condition)) +
   theme_minimal(base_size = 13) +
@@ -503,6 +361,7 @@ ggplot(cond_recode_plot, aes(self_c, targ)) +
 ```
 
 ```{r model 1 plot BW main effect condition}
+# Black and white plot for publication
 ggplot(cond_recode_plot, aes(self_c, targ, group = Condition)) +
   geom_smooth(method = "lm", 
               se = FALSE, 
@@ -528,16 +387,25 @@ ggplot(cond_recode_plot, aes(self_c, targ, group = Condition)) +
 # Model 2: Projection predicted by perceived polarization
 
 ```{r perceived pol model overall}
-#model
+# Model
 model2_randomslopes <- lmer(targ ~ self_c*ident_c*perceived_polar_c + 
                               (self_c|sub_id), 
                             data = model_data)
 
-#results
-tab_model(model2_randomslopes, title = "Model 2 with random slopes")
+# Results
+tab_model(model2_randomslopes, title = "Model 2 with random slopes",
+          dv.labels = "BFI responses for target",
+          pred.labels = c("(Intercept)",
+                          "BFI for self",
+                          "Identification",
+                          "Perceived polarization",
+                          "BFI for self:Identification",
+                          "BFI for self:Perceived polarization",
+                          "Identification:Perceived polarization",
+                          "BFI for self:Identification:Perceived polarization"))
 ```
 
-## Plots
+## Plots for Model 2
 
 ### Main effect of in-group identification on projection (trending)
 
@@ -546,16 +414,15 @@ tab_model(model2_randomslopes, title = "Model 2 with random slopes")
 describe(model_data$ident_c)
 
 effects_data2 <- as_tibble(effect(term = "self_c:ident_c", 
-                                 xlevels = list(ident_c = c(-0.93, 0, 0.93)),
+                                 xlevels = list(ident_c = c(-0.94, 0, 0.94)),
                                  mod = model2_randomslopes), na.rm = TRUE)
 
 effects_data2$Identification <-as.factor(effects_data2$ident_c)
 
+# Color plot
 ggplot(effects_data2, aes(self_c, fit)) +
-  geom_smooth(method = "lm", 
-              size = .7,
-              aes(color = Identification)) +
-  scale_color_discrete(breaks = c(-0.93, 0, 0.93), 
+  geom_line(size = .7, aes(color = Identification)) +
+  scale_color_viridis_d(breaks = c(-0.94, 0, 0.94), 
                        labels = c ("Weak Identification \n (1 SD Below)", 
                                   "Average Identification", 
                                   "High Identification \n (1 SD above)")) +
@@ -569,7 +436,7 @@ ggplot(effects_data2, aes(self_c, fit)) +
 ggplot(effects_data2, aes(self_c, fit, group = Identification)) +
   geom_line(size = .7, aes(linetype = Identification)) + 
   scale_linetype_manual("Identification", 
-                       breaks = c(-0.93, 0, 0.93), 
+                       breaks = c(-0.94, 0, 0.94), 
                        labels = c ("Weak Identification \n (1 SD Below)", 
                                   "Average Identification", 
                                   "High Identification \n (1 SD above)"),
@@ -585,7 +452,7 @@ ggplot(effects_data2, aes(self_c, fit, group = Identification)) +
 ### Main effect of perceived polarization on projection (trending)
 
 ```{r model 2 plot color main effect perceived polar}
-#Getting stats for plot
+# Getting stats for plot
 describe(model_data$perceived_polar)
 
 effects_data3 <- as_tibble(effect(term = "self_c:perceived_polar_c", 
@@ -596,6 +463,7 @@ effects_data3 <- as_tibble(effect(term = "self_c:perceived_polar_c",
 
 effects_data3$perceived_polar <-as.factor(effects_data3$perceived_polar_c)
 
+# Color plot for conference presentation
 ggplot(effects_data3, aes(self_c, fit)) +
   geom_smooth(method = "lm", 
               se = FALSE, 
@@ -614,9 +482,9 @@ ggplot(effects_data3, aes(self_c, fit)) +
 ```
 
 ```{r model 2 plot BW main effect perceived polar}
+# Black and white plot for publication
 ggplot(effects_data3, aes(self_c, fit)) +
-  geom_smooth(method = "lm", 
-              size = .7, 
+  geom_line(size = .7, 
               colour = "black",  
               aes(linetype = perceived_polar)) +
   scale_linetype_manual("Perceived Polarization",
@@ -652,26 +520,27 @@ mean_perceivedpol <- model_data %>%
 mean_perceivedpol
 ```
 
-### Results
+## Results
 
 ```{r perceived pol outcome model}
-#contrast codes
-contrasts(npf2_clean2$condition) <- "contr.helmert"
-contrasts(npf2_clean2$condition) 
+# Contrast codes
+contrasts(npf2_clean$condition) <- "contr.helmert"
+contrasts(npf2_clean$condition) 
 
-polar_outcome <- lm(perceived_polar ~ condition, data = npf2_clean2)
+# Model
+polar_outcome <- lm(perceived_polar ~ condition, data = npf2_clean)
 summary(polar_outcome)
 confint(polar_outcome)
 ```
 
 ```{r plots perceived pol outcome model}
 ggplot(mean_perceivedpol, aes(x = condition, y = mean)) +
-  geom_bar(stat="identity", aes(color = condition)) +
+  geom_bar(stat = "identity") +
   theme(legend.position = "none") +
   scale_colour_grey() +
   theme_minimal(base_size = 13) +
   labs(title = "Percieved polarization predicted by condition",
        x = "Issue polarization condition",
        y = "Perceived polarization") +
-  theme(legend.position="none")
+  theme(legend.position = "none")
 ```
