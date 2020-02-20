@@ -8,6 +8,30 @@ output:
     toc: true
     toc_float: true
 ---
+
+# Introduction to study
+
+This analysis uses data collected during the 2018 academic year from undergraduate students at the Univeristy of Oregon. This study aimed to answer the question of whether different politically polarizing contexts are more or less likely to lead people to see their political out-group as their opposite in regards to personality. We also included degree of in-group identification as a predictor, and conducted a second analysis using perceived polarization instead of issue polarization condition.
+
+Variable names that might be confusing:
+
+* **condition** : What issue participants were told the target disagreed with them on, these issues were designed to vary in polarization. Helmert contrasts were applied to this variable. *This variable was only inlcuded in Model 1.*
+    + 1 = political candidate
+    + 2 = racial discrimination
+    + 3 = marijuana legalization 
+    + 4 = third party political system
+ * **ident_c** : how highly they identify with others who feel the same about them on the issue. This variable is mean centered.
+    + Likert scale responses: 1 = *not at all identified* to 5 = *extremely identified*
+ * **self_c & targ** : Participants scores on the Big Five Inventory 2 Extra Small with additional honesty measures. They completed this for both themselves and the target. In order to assess projection, Self is included as a L1 predictor in the MLM. You can find the type of item the BFI2-XS with Honesty was measuring by looking at the variable titled **bfi2xsh_qtype**.
+ * **lib** : How much they thought the typical liberal would agree with their stance on the issue in the condition
+  * **cons** : How much they thought the typical conservative would agree with their stance on the issue in the condition
+   * **perceived_polar_c** : The difference between participant scores on lib and cons in order to assess how polarized people think that issue is societally. This predictor was mean centered. *This variable was only included in Model 2.*
+  * **check** : Manipulation check about whether or not they remembered the target's stance on the issue correctly; 4 means they were incorrect.
+  * **opin** : Whether participants agreed or disgareed with the issue they were presented (e.g., Do you support marijuana legalization?)
+    + 1 = Yes
+    + 4 = No
+    + 5 = Neither ** *This was an incorrect option given to the political candidate condition; people who responded this way were removed due to similiar answers not being available in the other conditions*
+
 ```{r setup data import and cleaning, echo = FALSE, warning = FALSE, message = FALSE, error = FALSE}
 # Cleaning
 ## import data

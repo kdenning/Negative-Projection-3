@@ -1587,6 +1587,35 @@ div.tocify {
 </div>
 
 
+<div id="introduction-to-study" class="section level1">
+<h1>Introduction to study</h1>
+<p>This analysis uses data collected during the 2018 academic year from undergraduate students at the Univeristy of Oregon. This study aimed to answer the question of whether different politically polarizing contexts are more or less likely to lead people to see their political out-group as their opposite in regards to personality. We also included degree of in-group identification as a predictor, and conducted a second analysis using perceived polarization instead of issue polarization condition.</p>
+<p>Variable names that might be confusing:</p>
+<ul>
+<li><strong>condition</strong> : What issue participants were told the target disagreed with them on, these issues were designed to vary in polarization. Helmert contrasts were applied to this variable. <em>This variable was only inlcuded in Model 1.</em>
+<ul>
+<li>1 = political candidate</li>
+<li>2 = racial discrimination</li>
+<li>3 = marijuana legalization</li>
+<li>4 = third party political system</li>
+</ul></li>
+<li><strong>ident_c</strong> : how highly they identify with others who feel the same about them on the issue. This variable is mean centered.
+<ul>
+<li>Likert scale responses: 1 = <em>not at all identified</em> to 5 = <em>extremely identified</em></li>
+</ul></li>
+<li><strong>self_c &amp; targ</strong> : Participants scores on the Big Five Inventory 2 Extra Small with additional honesty measures. They completed this for both themselves and the target. In order to assess projection, Self is included as a L1 predictor in the MLM. You can find the type of item the BFI2-XS with Honesty was measuring by looking at the variable titled <strong>bfi2xsh_qtype</strong>.</li>
+<li><strong>lib</strong> : How much they thought the typical liberal would agree with their stance on the issue in the condition</li>
+<li><strong>cons</strong> : How much they thought the typical conservative would agree with their stance on the issue in the condition</li>
+<li><strong>perceived_polar_c</strong> : The difference between participant scores on lib and cons in order to assess how polarized people think that issue is societally. This predictor was mean centered. <em>This variable was only included in Model 2.</em></li>
+<li><strong>check</strong> : Manipulation check about whether or not they remembered the target’s stance on the issue correctly; 4 means they were incorrect.</li>
+<li><strong>opin</strong> : Whether participants agreed or disgareed with the issue they were presented (e.g., Do you support marijuana legalization?)
+<ul>
+<li>1 = Yes</li>
+<li>4 = No</li>
+<li>5 = Neither ** <em>This was an incorrect option given to the political candidate condition; people who responded this way were removed due to similiar answers not being available in the other conditions</em></li>
+</ul></li>
+</ul>
+</div>
 <div id="demographics" class="section level1">
 <h1>Demographics</h1>
 <div id="number-of-participants-overall" class="section level2">
