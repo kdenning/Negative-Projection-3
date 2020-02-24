@@ -324,7 +324,7 @@ ggplot(effects_data, aes(self_c, fit, color = Identification)) +
               alpha = .3,
               aes(color = Identification)) +
   scale_color_manual(breaks = c(-0.94, 0, 0.94), 
-                     labels = c ("Weak (1 SD Below)", 
+                     labels = c ("Weak (1 SD below)", 
                                   "Average", 
                                   "High (1 SD above)"),
                      values = c('#404788FF',
@@ -333,8 +333,8 @@ ggplot(effects_data, aes(self_c, fit, color = Identification)) +
   theme_minimal(base_size = 13) +
   theme(legend.position = "bottom") +
   labs(title = "Main effect of in-group identification predicting projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 ```{r model 1 plot BW main effect identification}
@@ -351,8 +351,8 @@ ggplot(effects_data, aes(self_c, fit, group = Identification)) +
                                    "dotted")) +
   theme_minimal(base_size = 13) +
   labs(title = "Projection predicted by in-group identification",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 ### Main effect of condition on projection 
@@ -380,8 +380,8 @@ ggplot(cond_recode_plot, aes(self_c, targ)) +
                                '#55C667FF',
                                '#FDE725FF')) +
   labs(title = "Main effect of issue polarization condition on projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 ```{r model 1 plot BW main effect condition}
@@ -404,8 +404,8 @@ ggplot(cond_recode_plot, aes(self_c, targ, group = Condition)) +
                                    "dotted", 
                                    "dashed")) +
   labs(title = "Main effect of issue polarization on projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 # Model 2: Projection predicted by perceived polarization
@@ -447,13 +447,13 @@ effects_data2$Identification <-as.factor(effects_data2$ident_c)
 ggplot(effects_data2, aes(self_c, fit)) +
   geom_line(size = .7, aes(color = Identification)) +
   scale_color_viridis_d(breaks = c(-0.94, 0, 0.94), 
-                       labels = c ("Weak Identification \n (1 SD Below)", 
-                                  "Average Identification", 
-                                  "High Identification \n (1 SD above)")) +
+                       labels = c ("Weak identification \n (1 SD below)", 
+                                  "Average identification", 
+                                  "High identification \n (1 SD above)")) +
   theme_minimal() +
   labs(title = "Main effect of in-group identification predicting projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 ```{r model 2 plot BW main effect identification}
@@ -461,16 +461,16 @@ ggplot(effects_data2, aes(self_c, fit, group = Identification)) +
   geom_line(size = .7, aes(linetype = Identification)) + 
   scale_linetype_manual("Identification", 
                        breaks = c(-0.94, 0, 0.94), 
-                       labels = c ("Weak Identification \n (1 SD Below)", 
-                                  "Average Identification", 
-                                  "High Identification \n (1 SD above)"),
+                       labels = c ("Weak identification \n (1 SD below)", 
+                                  "Average identification", 
+                                  "High identification \n (1 SD above)"),
                         values = c("solid",
                                    "twodash", 
                                    "dotted")) +
   theme_minimal() +
-  labs(title = "Main effect of in-group identification predicting projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+  labs(title = "Trending main effect of in-group identification on projection",
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 ### Main effect of perceived polarization on projection (trending)
@@ -493,9 +493,9 @@ ggplot(effects_data3, aes(self_c, fit)) +
               se = FALSE, 
               size = 1.25, 
               aes(color = perceived_polar)) +
-  scale_color_viridis_d("Perceived Polarization",
+  scale_color_viridis_d("Perceived polarization",
                        breaks = c(-1.96, 0, 1.96), 
-                       labels = c ("Weak (1 SD Below)", 
+                       labels = c ("Weak (1 SD below)", 
                                   "Average", 
                                   "High (1 SD above)")) +
   theme_minimal(base_size = 13) +
@@ -511,7 +511,7 @@ ggplot(effects_data3, aes(self_c, fit)) +
   geom_line(size = .7, 
               colour = "black",  
               aes(linetype = perceived_polar)) +
-  scale_linetype_manual("Perceived Polarization",
+  scale_linetype_manual("Perceived polarization",
                         breaks = c(-1.96, 0, 1.96), 
                        labels = c ("Low (1 SD below)", 
                                   "Average", 
@@ -521,8 +521,8 @@ ggplot(effects_data3, aes(self_c, fit)) +
                                    "dotted")) +
   theme_minimal() +
   labs(title = "Main effect of perceived polarization predicting projection",
-       x = "Personality ratings for self",
-       y = "Personality ratings for target")
+       x = "Personality responses for self",
+       y = "Personality responses for target")
 ```
 
 # Perceived polarization as outcome predicted by condition
@@ -563,8 +563,8 @@ ggplot(mean_perceivedpol, aes(x = condition, y = mean)) +
   theme(legend.position = "none") +
   scale_colour_grey() +
   theme_minimal(base_size = 13) +
-  labs(title = "Percieved polarization predicted by condition",
-       x = "Issue polarization condition",
+  labs(title = "Percieved polarization predicted by issue polarization condition",
+       x = "Issue polarization",
        y = "Perceived polarization") +
   theme(legend.position = "none")
 ```
