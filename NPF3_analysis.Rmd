@@ -2,11 +2,15 @@
 title: "Negative Projection Follow-up 2"
 author: "Kathryn Denning"
 date: "Originally June 2019 - Updated December 2019"
-output: 
+output:
+  pdf_document:
+    toc: yes
   html_document:
-    code_folding: "hide"
-    toc: true
-    toc_float: true
+    code_folding: hide
+    toc: yes
+    toc_float: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Introduction to study
@@ -59,11 +63,22 @@ library(psych)
 library(sjPlot)
 library(emmeans)
 library(effects)
+library(Cairo)
+library(tinytex)
 
 # Setting global chunk options
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
+
+knitr::opts_knit$set(dev.args = list(type = "cairo"))
+
+trace(grDevices:::png, quote({
+  if (missing(type) && missing(antialias)) {
+    type <- "cairo-png"
+    antialias <- "subpixel"
+  }
+}), print = FALSE)
 
 # Data after manually removing participants who did not correctly complete the PT manipulation
 npf2_wide <- import("npf2_wide_ptclean2 copy.xlsx") 
@@ -343,7 +358,7 @@ ggplot(effects_data, aes(self_c, fit, group = Identification)) +
   geom_line(aes(linetype = Identification), size = .7) + 
   scale_linetype_manual("Identification", 
                        breaks = c(-0.94, 0, 0.94), 
-                       labels = c ("Weak (1 SD below)", 
+                       labels = c ("Low (1 SD below)", 
                                   "Average", 
                                   "High (1 SD above)"),
                         values = c("solid",
@@ -353,6 +368,8 @@ ggplot(effects_data, aes(self_c, fit, group = Identification)) +
   labs(title = "Projection predicted by in-group identification",
        x = "Personality responses for self",
        y = "Personality responses for target")
+
+ggsave("figure7.png", device = "png", type = "cairo", width = 6, height = 4)
 ```
 
 ### Main effect of condition on projection 
